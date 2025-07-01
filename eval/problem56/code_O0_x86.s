@@ -1,0 +1,64 @@
+	.section	__TEXT,__text,regular,pure_instructions
+	.build_version macos, 13, 0	sdk_version 13, 3
+	.globl	_func0                          ## -- Begin function func0
+	.p2align	4, 0x90
+_func0:                                 ## @func0
+	.cfi_startproc
+## %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$4032, %rsp                     ## imm = 0xFC0
+	movq	___stack_chk_guard@GOTPCREL(%rip), %rax
+	movq	(%rax), %rax
+	movq	%rax, -8(%rbp)
+	movl	%edi, -4020(%rbp)
+	leaq	-4016(%rbp), %rdi
+	xorl	%esi, %esi
+	movl	$4000, %edx                     ## imm = 0xFA0
+	callq	_memset
+	movl	$0, -4016(%rbp)
+	movl	$1, -4012(%rbp)
+	movl	$2, -4024(%rbp)
+LBB0_1:                                 ## =>This Inner Loop Header: Depth=1
+	movl	-4024(%rbp), %eax
+	cmpl	-4020(%rbp), %eax
+	jg	LBB0_4
+## %bb.2:                               ##   in Loop: Header=BB0_1 Depth=1
+	movl	-4024(%rbp), %eax
+	subl	$1, %eax
+	cltq
+	movl	-4016(%rbp,%rax,4), %ecx
+	movl	-4024(%rbp), %eax
+	subl	$2, %eax
+	cltq
+	addl	-4016(%rbp,%rax,4), %ecx
+	movslq	-4024(%rbp), %rax
+	movl	%ecx, -4016(%rbp,%rax,4)
+## %bb.3:                               ##   in Loop: Header=BB0_1 Depth=1
+	movl	-4024(%rbp), %eax
+	addl	$1, %eax
+	movl	%eax, -4024(%rbp)
+	jmp	LBB0_1
+LBB0_4:
+	movslq	-4020(%rbp), %rax
+	movl	-4016(%rbp,%rax,4), %eax
+	movl	%eax, -4028(%rbp)               ## 4-byte Spill
+	movq	___stack_chk_guard@GOTPCREL(%rip), %rax
+	movq	(%rax), %rax
+	movq	-8(%rbp), %rcx
+	cmpq	%rcx, %rax
+	jne	LBB0_6
+## %bb.5:
+	movl	-4028(%rbp), %eax               ## 4-byte Reload
+	addq	$4032, %rsp                     ## imm = 0xFC0
+	popq	%rbp
+	retq
+LBB0_6:
+	callq	___stack_chk_fail
+	ud2
+	.cfi_endproc
+                                        ## -- End function
+.subsections_via_symbols
