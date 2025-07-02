@@ -31,9 +31,10 @@ Below is a typical layout of the project from the root directory:
 │   └── problem1_test           # Baseline compiled binary for benchmarking
 │
 ├── .gitignore
-├── run_mctoll_pipeline.py # Main automation script
+├── run_mctoll_pipeline.py      # Main automation script
 ├── compile_originals.py        # Baseline compiler script for originals
-├── benchmark.py                # Benchmarking script
+├── full_benchmark.py           # Benchmarking script for generating JSON
+├── single_bench.py             # Benchmarking script for testing a single folder (outdated)
 ├── plot_results.py             # Graphing and histogram script
 └── README.md
 
@@ -73,7 +74,7 @@ The results are saved under a directory like `mctoll_results_O0-O0/`.
 This script compares the runtimes of the original and lifted executables.
 
 ```bash
-python3 benchmark.py
+python3 full_benchmark.py
 ```
 
 It asks for the optimization directories used earlier, then benchmarks each problem, skipping those that timeout. It creates a file like:
@@ -84,10 +85,21 @@ benchmark_results_O0_vs_O0-O0.json
 
 ### Step 4: Visualize the Results
 
-Generate a bar chart and optional histogram from the JSON data:
+Generate a bar graph histogram from the JSON data:
+(You will need to manually update the JSON data name)
 
 ```bash
-python3 plot_results.py
+python3 plot_results.py 
+```
+This creates a graph like:
+
+```
+benchmark_graph.png
+```
+
+Generate a horizontal bar chart:
+```bash
+python3 plot_results_relative.py 
 ```
 
 You’ll be prompted to select your input JSON and output file. This creates a graph like:
