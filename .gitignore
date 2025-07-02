@@ -1,3 +1,33 @@
-# Ignore compiled object and assembly files
+# ==================================
+# Build artifacts and compiled files
+# ==================================
 *.o
 *.s
+*.so
+*.ll
+*_test
+
+# ==================================
+# Generated Output Directories
+# ==================================
+# Ignore all mctoll results directories, e.g., "mctoll_results_O0-O2/"
+mctoll_results*/
+
+# Ignore all original binary directories, e.g., "original_dynamic_binaries_O2/"
+original_dynamic_binaries*/
+
+# ==================================
+# Generated Script Outputs
+# ==================================
+# Ignore the generated prototypes header
+prototypes.h
+
+# Ignore benchmark data and graphs
+*.json
+*.png
+
+# ==================================
+# Python specific ignores
+# ==================================
+__pycache__/
+*.pyc
