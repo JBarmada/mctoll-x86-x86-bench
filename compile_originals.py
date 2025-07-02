@@ -9,11 +9,7 @@ LLVM_BIN_DIR = "/home/jad.barmada/llvm-project/build/bin"
 
 # Directories relative to where this script is run
 EVAL_DIR = "eval"
-OUTPUT_DIR = "original_dynamic_binaries"
-
-# Compiler and flags for creating standard dynamic executables
-COMPILER = os.path.join(LLVM_BIN_DIR, "clang")
-CFLAGS = ['-g', '-O0'] # Using the same flags as the raised code for a fair comparison
+# OUTPUT_DIR will now be set dynamically based on user input
 # --------------------
 
 def main():
@@ -21,7 +17,21 @@ def main():
     Finds and compiles all original 'code.c' and 'test.c' files
     to create the baseline executables for benchmarking.
     """
-    print(f"--- Compiling Original Source Code for Benchmarking ---")
+    print("--- Original Code Compilation Setup ---")
+
+    # --- NEW: Get user input for optimization level ---
+    opt_level_input = input("Enter optimization level for original binaries (e.g., -O0, -O2): ").strip()
+    if not (opt_level_input.startswith('-O') and opt_level_input[2:].isdigit()):
+        print("Invalid optimization level format. Please use format like '-O0'. Exiting.")
+        return
+    
+    OPTIMIZATION_LEVEL = opt_level_input
+    # --- END OF NEW ---
+
+    # Dynamically create the output directory name
+    OUTPUT_DIR = f"original_dynamic_binaries_{OPTIMIZATION_LEVEL.replace('-', '')}"
+    
+    print(f"\n--- Compiling Original Source Code with {OPTIMIZATION_LEVEL} ---")
     
     # Get the absolute path to the directory where the script is being run
     script_base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -41,6 +51,10 @@ def main():
 
     print(f"Found {len(problem_dirs)} problem directories to process.")
     success_count = 0
+    
+    # Define the compiler and flags using the user's input
+    COMPILER = os.path.join(LLVM_BIN_DIR, "clang")
+    CFLAGS = ['-g', OPTIMIZATION_LEVEL]
 
     # Loop through each problem directory
     for dir_path in problem_dirs:
@@ -68,8 +82,8 @@ def main():
         try:
             subprocess.run(
                 compile_cmd,
-                check=True,       # Stop if the command fails
-                capture_output=True, # Capture stdout/stderr
+                check=True,
+                capture_output=True,
                 text=True
             )
             success_count += 1

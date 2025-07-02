@@ -5,34 +5,51 @@ import matplotlib.pyplot as plt
 import math
 
 # --- CONFIGURATION ---
-JSON_INPUT_FILE = "benchmark_results.json"
-CHART_OUTPUT_FILE = "relative_performance_graph.png"
+# These are now defined by user input, not hardcoded.
+# JSON_INPUT_FILE = "benchmark_results.json"
+# CHART_OUTPUT_FILE = "relative_performance_graph.png"
 Y_AXIS_LABEL_INTERVAL = 10
 
-# --- NEW: COLOR CONFIGURATION ---
-# You can change these color values to customize the look of the graph.
-# Matplotlib accepts color names (e.g., 'black', 'lightgray') or hex codes (e.g., '#333333').
 COLOR_CONFIG = {
-    "background": "#2E2E2E",      # A dark gray background
-    "text": "white",              # White text for good contrast
-    "slower_bar": "firebrick",    # Red for slower results
-    "faster_bar": "mediumseagreen", # Green for faster results
-    "grid_lines": "#555555",      # A lighter gray for grid lines
-    "error_bar": "silver"         # Color for the error bar caps
+    "background": "#2E2E2E",
+    "text": "white",
+    "slower_bar": "firebrick",
+    "faster_bar": "mediumseagreen",
+    "grid_lines": "#555555",
+    "error_bar": "silver"
 }
-# -----------------------------
+# --------------------
 
 def create_relative_performance_graph():
     """
-    Reads benchmark data, asks the user how to sort and what to display,
+    Reads benchmark data, asks the user for optimization levels and how to sort,
     and creates a horizontal bar chart.
     """
+    # --- NEW: Get user input for optimization levels to build filenames ---
+    print("--- Chart Configuration ---")
+    try:
+        original_opt_str = input("Enter optimization level for ORIGINAL binaries (e.g., O0, O2): ").strip().replace('-', '')
+        mctoll_opt1_str = input("Enter optimization level for MCTOLL Step 1 (compile .so) (e.g., O0, O2): ").strip().replace('-', '')
+        mctoll_opt3_str = input("Enter optimization level for MCTOLL Step 3 (link .ll) (e.g., O0, O2): ").strip().replace('-', '')
+
+        # Dynamically construct the input and output filenames
+        JSON_INPUT_FILE = f"benchmark_results_{original_opt_str}_vs_{mctoll_opt1_str}-{mctoll_opt3_str}.json"
+        CHART_OUTPUT_FILE = f"relative_performance_{original_opt_str}_vs_{mctoll_opt1_str}-{mctoll_opt3_str}.png"
+
+        print(f"\nWill read data from: ./{JSON_INPUT_FILE}")
+        print(f"Will save chart to:    ./{CHART_OUTPUT_FILE}\n")
+
+    except ValueError:
+        print("Invalid input. Please enter optimization levels like 'O0', 'O2', etc. Exiting.")
+        return
+    # --- END OF NEW ---
+
     print(f"Reading data from {JSON_INPUT_FILE}...")
     try:
         with open(JSON_INPUT_FILE, 'r') as f:
             data = json.load(f)
     except FileNotFoundError:
-        print(f"ERROR: '{JSON_INPUT_FILE}' not found. Please run benchmark.py first.")
+        print(f"ERROR: '{JSON_INPUT_FILE}' not found. Please run the corresponding benchmark.py first.")
         return
     except json.JSONDecodeError:
         print(f"ERROR: '{JSON_INPUT_FILE}' is empty or corrupted.")
@@ -51,7 +68,6 @@ def create_relative_performance_graph():
                 "name": problem.replace("problem", ""),
                 "delta": delta,
                 "error": combined_error,
-                # Use colors from the new config dictionary
                 "color": COLOR_CONFIG["slower_bar"] if delta > 0 else COLOR_CONFIG["faster_bar"]
             })
             
@@ -63,7 +79,9 @@ def create_relative_performance_graph():
     sort_choice = input("Sort by 'name' (numerical order) or 'delta' (performance impact)? [delta]: ").lower().strip()
 
     plot_data = []
-    plot_title = ""
+    # --- NEW: Dynamic title based on optimization levels ---
+    base_plot_title = f'Performance: Raised ({mctoll_opt1_str}/{mctoll_opt3_str}) vs. Original ({original_opt_str})'
+    # --- END OF NEW ---
 
     try:
         if sort_choice == 'name':
@@ -74,7 +92,7 @@ def create_relative_performance_graph():
             for p in all_problem_data:
                 if start_num <= int(p["name"]) <= end_num:
                     plot_data.append(p)
-            plot_title = f'Performance Deltas for Problems {start_num}-{end_num}'
+            plot_title = f'{base_plot_title}\nProblems {start_num}-{end_num}'
             
         else: # Default to sorting by delta
             all_problem_data.sort(key=lambda p: abs(p["delta"]), reverse=True)
@@ -84,7 +102,7 @@ def create_relative_performance_graph():
             
             plot_data = all_problem_data[:num_to_plot]
             plot_data.reverse()
-            plot_title = f'Top {len(plot_data)} Problems by Performance Delta'
+            plot_title = f'Top {len(plot_data)} Performance Deltas\n{base_plot_title}'
 
     except (ValueError, TypeError):
         print("Invalid input. Please enter a valid number. Exiting.")
@@ -107,12 +125,10 @@ def create_relative_performance_graph():
     y_pos = np.arange(len(problem_labels))
     fig, ax = plt.subplots(figsize=(12, 10))
     
-    # --- APPLYING COLORS ---
     fig.patch.set_facecolor(COLOR_CONFIG["background"])
     ax.set_facecolor(COLOR_CONFIG["background"])
 
     ax.barh(y_pos, performance_deltas, xerr=error_bars, align='center', color=bar_colors, ecolor=COLOR_CONFIG["error_bar"], capsize=3)
-    # ax.barh(y_pos, performance_deltas, align='center', color=bar_colors, ecolor=COLOR_CONFIG["error_bar"], capsize=3)
     ax.axvline(0, color=COLOR_CONFIG["text"], linewidth=0.8, linestyle='--')
 
     if sort_choice == 'name':
@@ -123,10 +139,9 @@ def create_relative_performance_graph():
     ax.set_yticks(y_pos, labels=display_labels)
     ax.invert_yaxis()
     
-    # Set colors for all text elements
     ax.set_xlabel('← Faster | Performance Delta (ms) | Slower →', color=COLOR_CONFIG["text"])
     ax.set_title(plot_title, color=COLOR_CONFIG["text"])
-    ax.tick_params(axis='x', colors=COLOR_CONFIG["text"], rotation=45) # Rotate x-axis ticks for readability
+    ax.tick_params(axis='x', colors=COLOR_CONFIG["text"], rotation=45)
     ax.tick_params(axis='y', colors=COLOR_CONFIG["text"])
     ax.spines['bottom'].set_color(COLOR_CONFIG["text"])
     ax.spines['top'].set_color(COLOR_CONFIG["text"]) 
@@ -135,19 +150,13 @@ def create_relative_performance_graph():
     
     ax.xaxis.grid(True, linestyle='--', which='major', color=COLOR_CONFIG["grid_lines"], alpha=.25)
 
-    # --- NEW: Manually set X-axis ticks for more detail ---
-    # Find the overall min and max delta to set the axis limits
-    min_delta = min(performance_deltas)
-    max_delta = max(performance_deltas)
-    
-    # Add a little padding to the limits, ensuring it's symmetrical around zero if possible
-    abs_max = max(abs(min_delta), abs(max_delta))
-    axis_limit = math.ceil(abs_max * 1.1)
-    
-    # Generate about 15 ticks within this range
-    num_ticks = 15
-    ax.set_xticks(np.linspace(-axis_limit, axis_limit, num_ticks))
-    # --- END OF NEW LOGIC ---
+    if performance_deltas:
+        min_delta = min(performance_deltas)
+        max_delta = max(performance_deltas)
+        abs_max = max(abs(min_delta), abs(max_delta))
+        axis_limit = math.ceil(abs_max * 1.1) if abs_max > 0 else 1
+        num_ticks = 15
+        ax.set_xticks(np.linspace(-axis_limit, axis_limit, num_ticks))
 
     fig.tight_layout(pad=1.5)
     plt.savefig(CHART_OUTPUT_FILE, dpi=300, facecolor=fig.get_facecolor())

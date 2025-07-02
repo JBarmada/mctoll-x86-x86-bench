@@ -7,19 +7,13 @@ import statistics
 import json
 
 # --- CONFIGURATION ---
-# Directories relative to where the script is run
-ORIGINAL_BIN_DIR = "original_dynamic_binaries" # Assumes you have compiled the originals here
-# The script will find McToll results here
-RESULTS_DIR = "mctoll_results"
-
-# Benchmark settings
-NUM_RUNS = 500
-WARMUP_RUNS = 25
+# These are now just defaults for the user prompts
+DEFAULT_NUM_RUNS = 500
+DEFAULT_WARMUP_RUNS = 25
 TIMEOUT_SECONDS = 10
-JSON_OUTPUT_FILE = "benchmark_results.json"
 # --------------------
 
-def run_benchmark(executable_path: str) -> dict | None:
+def run_benchmark(executable_path: str, num_runs: int, warmup_runs: int) -> dict | None:
     """Runs a given executable multiple times and returns its performance metrics."""
     if not os.path.exists(executable_path):
         return None
@@ -27,7 +21,7 @@ def run_benchmark(executable_path: str) -> dict | None:
     timings = []
     try:
         # Run the executable NUM_RUNS times
-        for _ in range(NUM_RUNS):
+        for _ in range(num_runs):
             start_time = time.perf_counter()
             subprocess.run(
                 [executable_path],
@@ -39,10 +33,10 @@ def run_benchmark(executable_path: str) -> dict | None:
             timings.append(end_time - start_time)
         
         # Discard warmup runs and calculate metrics
-        if len(timings) <= WARMUP_RUNS:
+        if len(timings) <= warmup_runs:
             return None
             
-        valid_runs = timings[WARMUP_RUNS:]
+        valid_runs = timings[warmup_runs:]
         if not valid_runs:
             return None
 
@@ -64,7 +58,38 @@ def main():
     Finds and benchmarks both original and raised test executables,
     then saves the results to a JSON file.
     """
-    print("--- Starting Performance Benchmark: Original vs. Raised Code ---")
+    print("--- Benchmark Configuration ---")
+
+    # Get user input for optimization levels to build directory names ---
+    try:
+        original_opt_str = input("Enter optimization level for ORIGINAL binaries (e.g., O0, O2): ").strip().replace('-', '')
+        mctoll_opt1_str = input("Enter optimization level for MCTOLL Step 1 (compile .so) (e.g., O0, O2): ").strip().replace('-', '')
+        mctoll_opt3_str = input("Enter optimization level for MCTOLL Step 3 (link .ll) (e.g., O0, O2): ").strip().replace('-', '')
+
+        # Dynamically construct directory and output file names
+        ORIGINAL_BIN_DIR = f"original_dynamic_binaries_{original_opt_str}"
+        RESULTS_DIR = f"mctoll_results_{mctoll_opt1_str}-{mctoll_opt3_str}"
+        JSON_OUTPUT_FILE = f"benchmark_results_{original_opt_str}_vs_{mctoll_opt1_str}-{mctoll_opt3_str}.json"
+
+        print(f"\nWill read original binaries from: ./{ORIGINAL_BIN_DIR}")
+        print(f"Will read raised binaries from:   ./{RESULTS_DIR}")
+        print(f"Will save results to:             ./{JSON_OUTPUT_FILE}\n")
+
+        num_runs_input = input(f"Enter the total number of times to run each test (default: {DEFAULT_NUM_RUNS}): ")
+        num_runs = int(num_runs_input) if num_runs_input else DEFAULT_NUM_RUNS
+
+        warmup_runs_input = input(f"Enter the number of warmup runs to discard (default: {DEFAULT_WARMUP_RUNS}): ")
+        warmup_runs = int(warmup_runs_input) if warmup_runs_input else DEFAULT_WARMUP_RUNS
+
+        if warmup_runs >= num_runs:
+            print("Error: Warmup runs must be less than total runs. Exiting.")
+            return
+
+    except ValueError:
+        print("Invalid input for run counts. Please enter a number. Exiting.")
+        return
+
+    print("\n--- Starting Performance Benchmark: Original vs. Raised Code ---")
     
     all_results = {}
     
@@ -73,7 +98,7 @@ def main():
         problem_name = f"problem{i}"
         print(f"\n--- Processing: {problem_name} ---")
 
-        # Define paths for both executables
+        # Define paths for both executables using the new dynamic directory names
         original_exe_path = os.path.join(ORIGINAL_BIN_DIR, f"{problem_name}_test")
         raised_exe_path = os.path.join(RESULTS_DIR, problem_name, f"{problem_name}_raised_test")
         
@@ -81,7 +106,7 @@ def main():
 
         # Benchmark the original code
         print(f"  - Benchmarking original binary...")
-        original_metrics = run_benchmark(original_exe_path)
+        original_metrics = run_benchmark(original_exe_path, num_runs, warmup_runs)
         if original_metrics:
             problem_results["original"] = original_metrics
             print(f"    -> Avg: {original_metrics['average_ms']:.3f} ms")
@@ -90,7 +115,7 @@ def main():
 
         # Benchmark the raised code
         print(f"  - Benchmarking raised binary...")
-        raised_metrics = run_benchmark(raised_exe_path)
+        raised_metrics = run_benchmark(raised_exe_path, num_runs, warmup_runs)
         if raised_metrics:
             problem_results["raised"] = raised_metrics
             print(f"    -> Avg: {raised_metrics['average_ms']:.3f} ms")
