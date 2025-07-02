@@ -31,7 +31,7 @@ Below is a typical layout of the project from the root directory:
 │   └── problem1_test           # Baseline compiled binary for benchmarking
 │
 ├── .gitignore
-├── automate_mctoll_pipeline.py # Main automation script
+├── run_mctoll_pipeline.py # Main automation script
 ├── compile_originals.py        # Baseline compiler script for originals
 ├── benchmark.py                # Benchmarking script
 ├── plot_results.py             # Graphing and histogram script

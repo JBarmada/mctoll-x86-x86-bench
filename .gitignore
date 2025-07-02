@@ -17,7 +17,8 @@ mctoll_results*/
 original_dynamic_binaries*/
 
 # Ignore Ghidra
-ghidra-x86-x86.rep/
+*.rep/
+*.gpr
 
 # ==================================
 # Generated Script Outputs
