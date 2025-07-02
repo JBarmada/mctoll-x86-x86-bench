@@ -16,6 +16,9 @@ mctoll_results*/
 # Ignore all original binary directories, e.g., "original_dynamic_binaries_O2/"
 original_dynamic_binaries*/
 
+# Ignore Ghidra
+ghidra-x86-x86.rep/
+
 # ==================================
 # Generated Script Outputs
 # ==================================

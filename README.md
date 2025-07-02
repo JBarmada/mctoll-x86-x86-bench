@@ -4,7 +4,7 @@ This project provides a complete pipeline to evaluate the correctness and perfor
 
 ## Features
 
-- **Automated Lifting Pipeline:** A Python script (`automate_mctoll_pipeline.py`) that automates the full lifting process over a problem set.
+- **Automated Lifting Pipeline:** A Python script (`run_mctoll_pipeline.py`) that automates the full lifting process over a problem set.
 - **Flexible Optimization Testing:** Easily modify optimization levels for both original and lifted builds.
 - **Automated Benchmarking:** The `benchmark.py` script runs performance tests with configurable repetitions, timeouts, and warm-up filtering.
 - **Data Export:** All benchmark results are saved to a structured `.json` file.
@@ -15,7 +15,6 @@ This project provides a complete pipeline to evaluate the correctness and perfor
 Below is a typical layout of the project from the root directory:
 
 ```
-
 .
 ├── eval/
 │   └── problem1/
