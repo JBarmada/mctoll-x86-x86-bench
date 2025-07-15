@@ -3,7 +3,7 @@ import subprocess
 
 # --- CONFIGURATION ---
 # Options are typically '-O0', '-O1', '-O2', or '-O3'
-OPTIMIZATION_LEVEL_STEP1 = '-O0'
+OPTIMIZATION_LEVEL_STEP1 = '-O2'
 OPTIMIZATION_LEVEL_STEP3 = '-O2'
 
 LLVM_BIN_DIR = "/home/jad.barmada/llvm-project/build/bin"
@@ -67,7 +67,7 @@ def main():
         try:
             # Step 1: Compile
             print(f"  [1/4] Compiling to shared library...")
-            compile_cmd = [ os.path.join(LLVM_BIN_DIR, "clang"), '-g', OPTIMIZATION_LEVEL_STEP1, '-shared', '-fPIC', '-o', so_filename, source_code_path ]
+            compile_cmd = [ os.path.join(LLVM_BIN_DIR, "clang"), '-g', OPTIMIZATION_LEVEL_STEP1, '-shared', '-fPIC', '-o', so_filename, source_code_path, '-lm' ]
             subprocess.run(compile_cmd, check=True, cwd=output_dir, capture_output=True)
 
             # Step 2: Raise

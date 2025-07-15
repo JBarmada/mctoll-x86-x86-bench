@@ -1,0 +1,109 @@
+
+problem1.raised.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <func0>:
+   0:	48 8d 44 24 dc       	lea    -0x24(%rsp),%rax
+   5:	48 89 44 24 98       	mov    %rax,-0x68(%rsp)
+   a:	48 8d 44 24 e0       	lea    -0x20(%rsp),%rax
+   f:	48 89 44 24 a0       	mov    %rax,-0x60(%rsp)
+  14:	48 8d 44 24 e4       	lea    -0x1c(%rsp),%rax
+  19:	48 89 44 24 a8       	mov    %rax,-0x58(%rsp)
+  1e:	48 8d 44 24 e8       	lea    -0x18(%rsp),%rax
+  23:	48 89 44 24 b0       	mov    %rax,-0x50(%rsp)
+  28:	48 8d 44 24 ec       	lea    -0x14(%rsp),%rax
+  2d:	48 89 44 24 b8       	mov    %rax,-0x48(%rsp)
+  32:	48 8d 44 24 f0       	lea    -0x10(%rsp),%rax
+  37:	48 89 44 24 c0       	mov    %rax,-0x40(%rsp)
+  3c:	48 8d 44 24 fc       	lea    -0x4(%rsp),%rax
+  41:	48 89 44 24 c8       	mov    %rax,-0x38(%rsp)
+  46:	b8 ef be ad de       	mov    $0xdeadbeef,%eax
+  4b:	48 89 44 24 d0       	mov    %rax,-0x30(%rsp)
+  50:	48 89 7c 24 f0       	mov    %rdi,-0x10(%rsp)
+  55:	89 74 24 ec          	mov    %esi,-0x14(%rsp)
+  59:	f3 0f 11 44 24 e8    	movss  %xmm0,-0x18(%rsp)
+  5f:	c7 44 24 e4 00 00 00 	movl   $0x0,-0x1c(%rsp)
+  66:	00 
+  67:	48 8b 4c 24 b8       	mov    -0x48(%rsp),%rcx
+  6c:	48 8b 44 24 a8       	mov    -0x58(%rsp),%rax
+  71:	8b 00                	mov    (%rax),%eax
+  73:	8b 09                	mov    (%rcx),%ecx
+  75:	29 c8                	sub    %ecx,%eax
+  77:	0f 90 c1             	seto   %cl
+  7a:	c1 e8 1f             	shr    $0x1f,%eax
+  7d:	28 c8                	sub    %cl,%al
+  7f:	0f 84 0e 01 00 00    	je     193 <func0+0x193>
+  85:	e9 00 00 00 00       	jmp    8a <func0+0x8a>
+  8a:	48 8b 44 24 a0       	mov    -0x60(%rsp),%rax
+  8f:	48 8b 4c 24 a8       	mov    -0x58(%rsp),%rcx
+  94:	8b 09                	mov    (%rcx),%ecx
+  96:	83 c1 01             	add    $0x1,%ecx
+  99:	89 08                	mov    %ecx,(%rax)
+  9b:	48 8b 4c 24 b8       	mov    -0x48(%rsp),%rcx
+  a0:	48 8b 44 24 a0       	mov    -0x60(%rsp),%rax
+  a5:	8b 00                	mov    (%rax),%eax
+  a7:	8b 09                	mov    (%rcx),%ecx
+  a9:	29 c8                	sub    %ecx,%eax
+  ab:	0f 90 c1             	seto   %cl
+  ae:	c1 e8 1f             	shr    $0x1f,%eax
+  b1:	28 c8                	sub    %cl,%al
+  b3:	0f 84 c4 00 00 00    	je     17d <func0+0x17d>
+  b9:	e9 00 00 00 00       	jmp    be <func0+0xbe>
+  be:	48 8b 44 24 98       	mov    -0x68(%rsp),%rax
+  c3:	48 8b 54 24 a0       	mov    -0x60(%rsp),%rdx
+  c8:	48 8b 74 24 a8       	mov    -0x58(%rsp),%rsi
+  cd:	48 8b 4c 24 c0       	mov    -0x40(%rsp),%rcx
+  d2:	48 8b 09             	mov    (%rcx),%rcx
+  d5:	48 63 36             	movslq (%rsi),%rsi
+  d8:	f3 0f 10 04 b1       	movss  (%rcx,%rsi,4),%xmm0
+  dd:	48 63 12             	movslq (%rdx),%rdx
+  e0:	f3 0f 10 0c 91       	movss  (%rcx,%rdx,4),%xmm1
+  e5:	f3 0f 5c c1          	subss  %xmm1,%xmm0
+  e9:	f3 0f 11 00          	movss  %xmm0,(%rax)
+  ed:	f3 0f 10 00          	movss  (%rax),%xmm0
+  f1:	0f 57 c9             	xorps  %xmm1,%xmm1
+  f4:	0f 2e c1             	ucomiss %xmm1,%xmm0
+  f7:	0f 92 c0             	setb   %al
+  fa:	0f 82 19 00 00 00    	jb     119 <func0+0x119>
+ 100:	e9 00 00 00 00       	jmp    105 <func0+0x105>
+ 105:	48 8b 44 24 98       	mov    -0x68(%rsp),%rax
+ 10a:	f3 0f 10 00          	movss  (%rax),%xmm0
+ 10e:	f3 0f 11 44 24 d0    	movss  %xmm0,-0x30(%rsp)
+ 114:	e9 1c 00 00 00       	jmp    135 <func0+0x135>
+ 119:	48 8b 44 24 98       	mov    -0x68(%rsp),%rax
+ 11e:	f3 0f 10 00          	movss  (%rax),%xmm0
+ 122:	66 0f 7e c0          	movd   %xmm0,%eax
+ 126:	35 00 00 00 80       	xor    $0x80000000,%eax
+ 12b:	66 0f 6e c0          	movd   %eax,%xmm0
+ 12f:	f3 0f 11 44 24 d0    	movss  %xmm0,-0x30(%rsp)
+ 135:	48 8b 44 24 b0       	mov    -0x50(%rsp),%rax
+ 13a:	f3 0f 10 4c 24 d0    	movss  -0x30(%rsp),%xmm1
+ 140:	f3 0f 10 00          	movss  (%rax),%xmm0
+ 144:	0f 2e c1             	ucomiss %xmm1,%xmm0
+ 147:	0f 92 c1             	setb   %cl
+ 14a:	0f 94 c0             	sete   %al
+ 14d:	08 c8                	or     %cl,%al
+ 14f:	a8 01                	test   $0x1,%al
+ 151:	0f 85 10 00 00 00    	jne    167 <func0+0x167>
+ 157:	48 8b 44 24 c8       	mov    -0x38(%rsp),%rax
+ 15c:	c7 00 01 00 00 00    	movl   $0x1,(%rax)
+ 162:	e9 37 00 00 00       	jmp    19e <func0+0x19e>
+ 167:	e9 00 00 00 00       	jmp    16c <func0+0x16c>
+ 16c:	48 8b 44 24 a0       	mov    -0x60(%rsp),%rax
+ 171:	8b 08                	mov    (%rax),%ecx
+ 173:	83 c1 01             	add    $0x1,%ecx
+ 176:	89 08                	mov    %ecx,(%rax)
+ 178:	e9 1e ff ff ff       	jmp    9b <func0+0x9b>
+ 17d:	e9 00 00 00 00       	jmp    182 <func0+0x182>
+ 182:	48 8b 44 24 a8       	mov    -0x58(%rsp),%rax
+ 187:	8b 08                	mov    (%rax),%ecx
+ 189:	83 c1 01             	add    $0x1,%ecx
+ 18c:	89 08                	mov    %ecx,(%rax)
+ 18e:	e9 d4 fe ff ff       	jmp    67 <func0+0x67>
+ 193:	48 8b 44 24 c8       	mov    -0x38(%rsp),%rax
+ 198:	c7 00 0a 00 00 00    	movl   $0xa,(%rax)
+ 19e:	48 8b 44 24 c8       	mov    -0x38(%rsp),%rax
+ 1a3:	8b 00                	mov    (%rax),%eax
+ 1a5:	c3                   	ret    

@@ -1,0 +1,61 @@
+
+problem1.original.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <func0>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 89 7d f0          	mov    %rdi,-0x10(%rbp)
+   8:	89 75 ec             	mov    %esi,-0x14(%rbp)
+   b:	f3 0f 11 45 e8       	movss  %xmm0,-0x18(%rbp)
+  10:	c7 45 e4 00 00 00 00 	movl   $0x0,-0x1c(%rbp)
+  17:	8b 45 e4             	mov    -0x1c(%rbp),%eax
+  1a:	3b 45 ec             	cmp    -0x14(%rbp),%eax
+  1d:	0f 8d b0 00 00 00    	jge    d3 <func0+0xd3>
+  23:	8b 45 e4             	mov    -0x1c(%rbp),%eax
+  26:	83 c0 01             	add    $0x1,%eax
+  29:	89 45 e0             	mov    %eax,-0x20(%rbp)
+  2c:	8b 45 e0             	mov    -0x20(%rbp),%eax
+  2f:	3b 45 ec             	cmp    -0x14(%rbp),%eax
+  32:	0f 8d 88 00 00 00    	jge    c0 <func0+0xc0>
+  38:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  3c:	48 63 4d e4          	movslq -0x1c(%rbp),%rcx
+  40:	f3 0f 10 04 88       	movss  (%rax,%rcx,4),%xmm0
+  45:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  49:	48 63 4d e0          	movslq -0x20(%rbp),%rcx
+  4d:	f3 0f 5c 04 88       	subss  (%rax,%rcx,4),%xmm0
+  52:	f3 0f 11 45 dc       	movss  %xmm0,-0x24(%rbp)
+  57:	f3 0f 10 45 dc       	movss  -0x24(%rbp),%xmm0
+  5c:	0f 57 c9             	xorps  %xmm1,%xmm1
+  5f:	0f 2e c1             	ucomiss %xmm1,%xmm0
+  62:	0f 82 0f 00 00 00    	jb     77 <func0+0x77>
+  68:	f3 0f 10 45 dc       	movss  -0x24(%rbp),%xmm0
+  6d:	f3 0f 11 45 d8       	movss  %xmm0,-0x28(%rbp)
+  72:	e9 17 00 00 00       	jmp    8e <func0+0x8e>
+  77:	f3 0f 10 45 dc       	movss  -0x24(%rbp),%xmm0
+  7c:	66 0f 7e c0          	movd   %xmm0,%eax
+  80:	35 00 00 00 80       	xor    $0x80000000,%eax
+  85:	66 0f 6e c0          	movd   %eax,%xmm0
+  89:	f3 0f 11 45 d8       	movss  %xmm0,-0x28(%rbp)
+  8e:	f3 0f 10 4d d8       	movss  -0x28(%rbp),%xmm1
+  93:	f3 0f 10 45 e8       	movss  -0x18(%rbp),%xmm0
+  98:	0f 2e c1             	ucomiss %xmm1,%xmm0
+  9b:	0f 86 0c 00 00 00    	jbe    ad <func0+0xad>
+  a1:	c7 45 fc 01 00 00 00 	movl   $0x1,-0x4(%rbp)
+  a8:	e9 2d 00 00 00       	jmp    da <func0+0xda>
+  ad:	e9 00 00 00 00       	jmp    b2 <func0+0xb2>
+  b2:	8b 45 e0             	mov    -0x20(%rbp),%eax
+  b5:	83 c0 01             	add    $0x1,%eax
+  b8:	89 45 e0             	mov    %eax,-0x20(%rbp)
+  bb:	e9 6c ff ff ff       	jmp    2c <func0+0x2c>
+  c0:	e9 00 00 00 00       	jmp    c5 <func0+0xc5>
+  c5:	8b 45 e4             	mov    -0x1c(%rbp),%eax
+  c8:	83 c0 01             	add    $0x1,%eax
+  cb:	89 45 e4             	mov    %eax,-0x1c(%rbp)
+  ce:	e9 44 ff ff ff       	jmp    17 <func0+0x17>
+  d3:	c7 45 fc 0a 00 00 00 	movl   $0xa,-0x4(%rbp)
+  da:	8b 45 fc             	mov    -0x4(%rbp),%eax
+  dd:	5d                   	pop    %rbp
+  de:	c3                   	ret    

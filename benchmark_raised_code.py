@@ -3,7 +3,7 @@ import subprocess
 import time
 import statistics
 
-BASE_RESULTS_DIR = "/home/jad.barmada/mctoll-x86-x86/mctoll_results"
+BASE_RESULTS_DIR = "/home/jad.barmada/mctoll-x86-x86/mctoll_results_O2-O2"
 WARMUP_RUNS = 25
 TOTAL_RUNS = 500
 MAX_TIME_PER_RUN = 2.0  # seconds, adjust if needed
