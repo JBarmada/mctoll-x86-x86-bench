@@ -3,10 +3,10 @@ import subprocess
 
 # --- CONFIGURATION ---
 # Options are typically '-O0', '-O1', '-O2', or '-O3'
-OPTIMIZATION_LEVEL_STEP1 = '-O2'
-OPTIMIZATION_LEVEL_STEP3 = '-O2'
+OPTIMIZATION_LEVEL_STEP1 = '-O0'
+OPTIMIZATION_LEVEL_STEP3 = '-O0'
 
-LLVM_BIN_DIR = "/home/jad.barmada/llvm-project/build/bin"
+LLVM_BIN_DIR = "/home/jad/asm-to-asm/tools/my-llvm-tools/llvm-project/build-mctoll/bin"
 script_base_dir = os.getcwd()
 EVAL_DIR = "eval"
 opt1_str = OPTIMIZATION_LEVEL_STEP1.replace('-', '')
@@ -50,7 +50,7 @@ def main():
         problem_name = f"problem{i}"
         print(f"\n--- Processing: {problem_name} ---")
 
-        output_dir = os.path.join(RESULTS_DIR, problem_name)
+        output_dir = os.path.join("artifacts", "so_files", RESULTS_DIR, problem_name)
         source_code_path = os.path.join(script_base_dir, EVAL_DIR, problem_name, 'code.c')
         source_test_path = os.path.join(script_base_dir, EVAL_DIR, problem_name, 'test.c')
 
@@ -67,7 +67,7 @@ def main():
         try:
             # Step 1: Compile
             print(f"  [1/4] Compiling to shared library...")
-            compile_cmd = [ os.path.join(LLVM_BIN_DIR, "clang"), '-g', OPTIMIZATION_LEVEL_STEP1, '-shared', '-fPIC', '-o', so_filename, source_code_path, '-lm' ]
+            compile_cmd = [ os.path.join(LLVM_BIN_DIR, "clang"), '-g', '-fno-builtin', OPTIMIZATION_LEVEL_STEP1, '-shared', '-fPIC', '-o', so_filename, source_code_path, '-lm' ]
             subprocess.run(compile_cmd, check=True, cwd=output_dir, capture_output=True)
 
             # Step 2: Raise
